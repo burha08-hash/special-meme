@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防災・避難訓練 事前学習ハンドブック</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --primary-orange: #f97316;
+            --primary-orange-hover: #ea580c;
+            --primary-blue: #2563eb;
+            --primary-blue-hover: #1d4ed8;
+            --correct-color: #16a34a;
+            --incorrect-color: #dc2626;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .point-box {
+            background-color: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .warning-box {
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        /* -----------------------------------
+           クイズコンポーネント用スタイル
+        ----------------------------------- */
+        #quizWrapper {
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        #learningSection {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .check-card {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fb923c;
+            margin-bottom: 12px;
+        }
+
+        .card-title.ng-title { color: #f87171; }
+
+        .check-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .check-list li {
+            position: relative;
+            padding-left: 18px;
+            color: #cbd5e1;
+        }
+
+        .check-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-sub);
+        }
+
+        .cta-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .cta-lead {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 16px;
+        }
+
+        .start-btn {
+            background-color: var(--primary-orange);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 36px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+        }
+
+        .start-btn:hover {
+            background-color: var(--primary-orange-hover);
+            transform: translateY(-2px);
+        }
+
+        #quizSection {
+            display: none;
+            background-color: #ffffff;
+            color: #0f172a;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .quiz-title {
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-blue);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            margin-top: 10px;
+        }
+
+        .question-block { margin-bottom: 20px; }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #0f172a;
+        }
+
+        .option-btn:hover { background-color: #e2e8f0; }
+
+        .option-btn.selected-correct {
+            background-color: #dcfce7;
+            border-color: var(--correct-color);
+            color: #14532d;
+        }
+
+        .option-btn.selected-incorrect {
+            background-color: #fee2e2;
+            border-color: var(--incorrect-color);
+            color: #7f1d1d;
+        }
+
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+
+        .hint-container { margin-top: 16px; }
+
+        details summary {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            padding: 6px 0;
+            user-select: none;
+        }
+
+        .hint-text {
+            background-color: #fff7ed;
+            border-left: 4px solid #ea580c;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #9a3412;
+            margin-top: 6px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .explanation-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .explanation-box.correct { background-color: #f0fdf4; border: 1px solid #bbf7d0; }
+        .explanation-box.incorrect { background-color: #fef2f2; border: 1px solid #fecaca; }
+
+        .result-badge {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 900;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .result-badge.correct { background-color: var(--correct-color); }
+        .result-badge.incorrect { background-color: var(--incorrect-color); }
+
+        .explanation-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .explanation-text { font-size: 13px; color: #0f172a; line-height: 1.6; }
+
+        .action-container { margin-top: 20px; text-align: right; }
+
+        .next-btn {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: none;
+        }
+
+        .next-btn:hover { background-color: var(--primary-blue-hover); }
+
+        .final-result { text-align: center; padding: 20px 0; display: none; }
+        .score-display { font-size: 42px; font-weight: 900; color: var(--primary-blue); margin: 12px 0; }
+
+        .restart-btn {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .grid-container { grid-template-columns: 1fr; }
+            #learningSection, #quizSection { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- ヘッダー -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="bg-orange-600 text-xs font-bold px-3 py-1 rounded-full uppercase">避難訓練資料</span>
+                <h1 class="text-xl font-bold tracking-tight">防災・避難訓練 事前学習ハンドブック</h1>
+            </div>
+            <a href="#quizSectionAnchor" class="hidden sm:inline-block text-sm text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-pen-to-square mr-1"></i>確認クイズ（全40問）
+            </a>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 space-y-10">
+
+        <!-- 導入 -->
+        <div class="bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-2xl p-8 shadow-lg">
+            <div class="max-w-3xl">
+                <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">正しい知識で身を守る</span>
+                <h2 class="text-3xl font-black mb-4">いざという時に命を守る「防災知識」学習ガイド</h2>
+                <p class="text-orange-100 leading-relaxed text-base">
+                    地震・火災・自然災害・避難生活の4つの分野で「正しい行動」と「やってはいけないNG行動」をマスターしましょう！動画でしっかりイメージをつかんだら、最後の確認クイズ（全40問）にチャレンジしてください。
+                </p>
+            </div>
+        </div>
+
+        <!-- 目次ナビゲーション -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <a href="#part1" class="bg-white p-3 rounded-xl border border-slate-200 hover:border-orange-500 transition text-center group">
+                <div class="text-orange-600 text-xl mb-1"><i class="fa-solid fa-house-chimney-crack"></i></div>
+                <div class="font-bold text-slate-800 text-xs">第1章：地震篇</div>
+            </a>
+            <a href="#part2" class="bg-white p-3 rounded-xl border border-slate-200 hover:border-orange-500 transition text-center group">
+                <div class="text-red-600 text-xl mb-1"><i class="fa-solid fa-fire-extinguisher"></i></div>
+                <div class="font-bold text-slate-800 text-xs">第2章：火災篇</div>
+            </a>
+            <a href="#part3" class="bg-white p-3 rounded-xl border border-slate-200 hover:border-orange-500 transition text-center group">
+                <div class="text-blue-600 text-xl mb-1"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                <div class="font-bold text-slate-800 text-xs">第3章：自然災害</div>
+            </a>
+            <a href="#part4" class="bg-white p-3 rounded-xl border border-slate-200 hover:border-orange-500 transition text-center group">
+                <div class="text-emerald-600 text-xl mb-1"><i class="fa-solid fa-kit-medical"></i></div>
+                <div class="font-bold text-slate-800 text-xs">第4章：避難・備蓄</div>
+            </a>
+            <a href="#quizSectionAnchor" class="bg-orange-50 border border-orange-300 p-3 rounded-xl hover:bg-orange-100 transition text-center group col-span-2 md:col-span-1">
+                <div class="text-orange-700 text-xl mb-1"><i class="fa-solid fa-pen-to-square"></i></div>
+                <div class="font-bold text-orange-900 text-xs">確認クイズ40問</div>
+            </a>
+        </div>
+
+        <!-- 第1章：地震篇 -->
+        <section id="part1" class="section-card p-6 md:p-8 space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-200 pb-4">
+                <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl">1</div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">地震が発生したときの行動（地震篇）</h3>
+                    <p class="text-sm text-slate-500">揺れを感じた瞬間の初動から屋内外での避難ルール</p>
+                </div>
+            </div>
+
+            <!-- 動画視聴カード -->
+            <div class="bg-blue-50 border-2 border-dashed border-blue-600 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-youtube text-red-500 text-3xl"></i>
+                    <div>
+                        <div class="font-bold text-blue-900 text-sm sm:text-base">【動画で学習】地震に対する10の備え（日本語字幕）</div>
+                        <div class="text-xs text-slate-500">東京消防庁 公式動画</div>
+                    </div>
+                </div>
+                <a href="https://www.youtube.com/watch?v=eBSbH3TjVX4" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-bold px-5 py-2 rounded-full text-sm transition whitespace-nowrap">
+                    動画を見る ↗
+                </a>
+            </div>
+
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-shield-halved text-orange-600 mr-2"></i>1. 基本姿勢「シェイクアウト（ShakeOut）」
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm">
+                        地震が発生した直後、屋内で身を守る基本動作は<strong>「① 姿勢を低く」「② 頭を守る」「③ 動かない」</strong>の3ステップです。丈夫な机の下に潜り、脚をしっかり握りましょう。非常持出袋は玄関付近など持ち出しやすい場所にまとめて置きます。
+                    </p>
+                    <div class="warning-box">
+                        <span class="font-bold text-red-800">⚠️ NG行動：</span>
+                        <span class="text-sm text-slate-700">「すぐに火を消しに行く」「あわてて外へ飛び出す」は揺れの中では転倒・落下物の危険があり大変危険です！</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-person-running text-orange-600 mr-2"></i>2. 屋外での安全確保
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                        <li><strong>危険な構造物から離れる：</strong> ブロック塀や自動販売機は倒壊のリスクが高いため近寄らないでください。</li>
+                        <li><strong>落下物に注意：</strong> 看板やガラスの飛散に備え、バッグなどで頭を保護しながら安全な広い場所へ移動します。</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-elevator text-orange-600 mr-2"></i>3. エレベーター・出先での対応
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="point-box">
+                            <span class="font-bold text-emerald-800">〇 エレベーター乗車中：</span><br>
+                            「すべての階のボタンを押す」。最初に止まった階で即座に降り、階段で避難します。閉じ込められたら非常ボタンで救助を待ちます。
+                        </div>
+                        <div class="warning-box">
+                            <span class="font-bold text-red-800">✕ 地震後のエレベーター利用：</span><br>
+                            余震による停電で閉じ込められる恐れがあるため、避難時には絶対にエレベーターを使わず「階段」を使用してください。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-hammer text-orange-600 mr-2"></i>4. 閉じ込め対策と家具・オフィス機器固定
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                        <li><strong>閉じ込められたら：</strong> 大声を出し続けると体力を消耗します。硬いもの（パイプや壁）を叩いて音で居場所を知らせます。</li>
+                        <li><strong>家具・PCの転倒防止：</strong> 家具は壁の奥にある<strong>「柱」や「間柱（下地）」</strong>にネジ留めします。PCや周辺機器は耐震ストッパー・耐震ジェルで固定します。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第2章：火災篇 -->
+        <section id="part2" class="section-card p-6 md:p-8 space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-200 pb-4">
+                <div class="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl">2</div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">火災の予防と発生時の対応（火災篇）</h3>
+                    <p class="text-sm text-slate-500">消火器の使い方・煙対策・電気火災の防止</p>
+                </div>
+            </div>
+
+            <!-- 動画視聴カード -->
+            <div class="bg-blue-50 border-2 border-dashed border-blue-600 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-youtube text-red-500 text-3xl"></i>
+                    <div>
+                        <div class="font-bold text-blue-900 text-sm sm:text-base">【動画で学習】ネットで自衛消防訓練（総合編・日本語）</div>
+                        <div class="text-xs text-slate-500">東京消防庁 公式動画</div>
+                    </div>
+                </div>
+                <a href="https://www.youtube.com/watch?v=YERYCuxhCRo" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-bold px-5 py-2 rounded-full text-sm transition whitespace-nowrap">
+                    動画を見る ↗
+                </a>
+            </div>
+
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-fire-extinguisher text-red-600 mr-2"></i>1. 初期消火の基本と見極め
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800">粉末消火器の放射時間：</span><br>
+                            およそ<strong>「15秒程度」</strong>しか持ちません。「①ピンを抜く ➔ ②ホースを向ける ➔ ③レバーを握る」の順で火元を狙います。
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800">避難を開始すべきタイミング：</span><br>
+                            火が<strong>「天井に達したとき」</strong>が限界です。直ちに初期消火を諦め、扉を閉めて空気の流れを絶ちながら避難します。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-smog text-red-600 mr-2"></i>2. 煙からの避難と安全確認
+                    </h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="point-box">
+                            <span class="font-bold text-emerald-800">〇 煙の特徴と避難姿勢：</span><br>
+                            煙は縦（上昇速度 約3〜5m/秒）へ非常に早く進みます。ハンカチ等で口元を覆い、床付近の空気を吸うため<strong>「低い姿勢」</strong>で移動します。
+                        </div>
+                        <div class="warning-box">
+                            <span class="font-bold text-red-800">✕ 扉を開ける前の熱さ確認：</span><br>
+                            扉を開ける際は、まず<strong>「手の甲でドアノブの熱さ」</strong>を確認してください。熱い場合は奥で火災が広がっているため開けてはいけません。
+                        </div>
+                        <div class="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+                            <span class="font-bold text-orange-800">🔥 服に火がついたとき（着衣着火）：</span><br>
+                            走り回ると風で火が拡大します。その場に倒れ、床を転がって火を消す<strong>「ストップ・ドロップ＆ロール」</strong>（止まる・倒れる・転がる）を行います。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-plug-circle-bolt text-red-600 mr-2"></i>3. トラッキング火災と通電火災
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                        <li><strong>トラッキング現象：</strong> コンセントに溜まったホコリと湿気がスパークして発火する現象。定期的な清掃で防ぎます。</li>
+                        <li><strong>通電火災：</strong> 停電復旧時に倒れたヒーター等に再通電して起こる火災。避難時は必ず<strong>「ブレーカーを落として」</strong>移動します。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第3章：自然災害篇 -->
+        <section id="part3" class="section-card p-6 md:p-8 space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-200 pb-4">
+                <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl">3</div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">風水害・土砂災害・津波（自然災害篇）</h3>
+                    <p class="text-sm text-slate-500">避難警戒レベル・津波避難・水害対策</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-triangle-exclamation text-blue-600 mr-2"></i>1. 避難情報と警戒レベル
+                    </h4>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="bg-red-600 text-white font-bold text-xs px-2 py-1 rounded">警戒レベル4</span>
+                            <span class="font-bold text-slate-800">避難指示：</span> 危険な場所から<strong>全員速やかに避難</strong>する段階です。レベル5（災害発生）を待たずに避難を完了させます。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-water text-blue-600 mr-2"></i>2. 浸水・津波避難での歩行と持ち物
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="point-box">
+                            <span class="font-bold text-emerald-800">〇 水没道路の避難方法：</span><br>
+                            長靴は浸水すると重くなるため<strong>「脱げにくいスニーカー」</strong>を履きます。手持ちの傘は足元のマンホールや段差を探る「杖」として使います。
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800">津波避難の基本：</span><br>
+                            「高台や津波避難ビル」の上層階へ避難します。台風や強風時の屋外での片付け作業は危険なため風が強まる前に行います。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-hill-rockslide text-blue-600 mr-2"></i>3. 垂直避難と土砂災害の前兆
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                        <li><strong>垂直避難：</strong> 浸水が深くなり屋外避難が危険な場合は、建物の2階以上の高い場所へ逃げます。</li>
+                        <li><strong>土砂災害の前兆：</strong> 「がけから濁った水が湧き出る」「小石が落ちてくる」「地鳴り」などが合図です。（※「澄んだ水」ではありません）</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第4章：避難・備蓄・救急篇 -->
+        <section id="part4" class="section-card p-6 md:p-8 space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-200 pb-4">
+                <div class="bg-emerald-100 text-emerald-600 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl">4</div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">避難・備蓄・救急（避難生活篇）</h3>
+                    <p class="text-sm text-slate-500">水・備蓄・連絡・応急手当・避難所での注意点</p>
+                </div>
+            </div>
+
+            <!-- 動画視聴カード -->
+            <div class="bg-blue-50 border-2 border-dashed border-blue-600 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-youtube text-red-500 text-3xl"></i>
+                    <div>
+                        <div class="font-bold text-blue-900 text-sm sm:text-base">【動画で学習】避難所経験者が語る防災（3週間の避難所生活の現実）</div>
+                        <div class="text-xs text-slate-500">東日本大震災の想定と現実のギャップ・備蓄リュックの中身</div>
+                    </div>
+                </div>
+                <a href="https://www.youtube.com/watch?v=jANJez8zszY" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-bold px-5 py-2 rounded-full text-sm transition whitespace-nowrap">
+                    動画を見る ↗
+                </a>
+            </div>
+
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-boxes-packing text-emerald-600 mr-2"></i>1. 飲料水・備蓄・連絡手段
+                    </h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                        <li><strong>必要な水：</strong> 大人1人あたり1日<strong>「3リットル」</strong>（3日分で9リットルが目安）。</li>
+                        <li><strong>ローリングストック法：</strong> 日常的に多めに買い置きし、消費しながら備蓄を保つ方法。</li>
+                        <li><strong>災害用伝言ダイヤル：</strong> 番号は<strong>「171」</strong>（いない）。</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-person-walking-luggage text-emerald-600 mr-2"></i>2. 避難時のルール（お・は・し・も・ち）
+                    </h4>
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-lg text-sm space-y-2">
+                        <div class="font-bold text-emerald-900 text-base">避難の合い言葉「お・は・し・も・ち」</div>
+                        <p class="text-slate-700">
+                            <strong>お</strong>さない / <strong>は</strong>しらない / <strong>し</strong>ゃべらない / <strong>も</strong>どらない / <strong>ち</strong>かよらない<br>
+                            ※「も」は（一度避難したら荷物を取りに）<strong>戻らない</strong>を意味します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-notes-medical text-emerald-600 mr-2"></i>3. 応急手当と避難所での感染症・健康対策
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800">直接圧迫止血法：</span><br>
+                            血液感染を防ぐため<strong>「ビニール手袋やポリ袋」</strong>を着用し、ガーゼ等を傷口に直接当てて強く圧迫します。
+                        </div>
+                        <div class="warning-box">
+                            <span class="font-bold text-red-800">避難所での健康管理：</span><br>
+                            手洗い・消毒・マスクの徹底で感染症を防止。また、エコノミークラス症候群予防のために定期的なストレッチと適切な水分補給を行います。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- インタラクティブ・防災理解度確認クイズ（全40問）コンポーネント -->
+        <div id="quizSectionAnchor"></div>
+        <div id="quizWrapper">
+            <!-- 1. クイズ直前点検画面（ダークテーマ） -->
+            <div id="learningSection">
+                <h2 class="section-header">📑 クイズ直前！引っかかりやすいポイント総点検</h2>
+                
+                <div class="grid-container">
+                    <div class="check-card">
+                        <div class="card-title">【数値・名称の暗記チェック】</div>
+                        <ul class="check-list">
+                            <li>1日の必要水量（1人あたりの目安）</li>
+                            <li>災害用伝言ダイヤルの専用番号</li>
+                            <li>粉末消火器の連続噴射時間</li>
+                            <li>警戒レベル4発令時の行動基準</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="check-card">
+                        <div class="card-title ng-title">【絶対にやってはいけないNG行動】</div>
+                        <ul class="check-list">
+                            <li>扉の熱さ確認を行わない火災避難</li>
+                            <li>服に火がついた状態で走り回る行為</li>
+                            <li>地震直後の移動におけるエレベーター利用</li>
+                            <li>水没道路を長靴で歩行する避難行動</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cta-container">
+                    <p class="cta-lead">知識の準備は整いましたか？ さっそく理解度チェッククイズ（全40問）に挑戦してみましょう！</p>
+                    <button class="start-btn" onclick="startQuiz()">
+                        学習完了！クイズへ進む ➔
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. クイズ実行画面 -->
+            <div id="quizSection">
+                <div class="quiz-header">
+                    <h1 class="quiz-title">避難訓練・防災クイズ</h1>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="quiz-meta">
+                        <span id="questionCounter">問題 1 / 40</span>
+                        <span>正解数: <span id="scoreCounter">0</span></span>
+                    </div>
+                </div>
+
+                <div id="quizContent">
+                    <div class="question-block">
+                        <div class="question-number" id="qNum">第 1 問</div>
+                        <div class="question-text" id="qText">読み込み中...</div>
+                    </div>
+
+                    <div class="options-grid" id="optionsGrid"></div>
+
+                    <div class="hint-container">
+                        <details>
+                            <summary>💡 ヒントを見る</summary>
+                            <div class="hint-text" id="hintText">ヒントを表示します。</div>
+                        </details>
+                    </div>
+
+                    <div class="explanation-box" id="explanationBox">
+                        <span class="result-badge" id="resultBadge">正解</span>
+                        <div class="explanation-title" id="expTitle">解説</div>
+                        <div class="explanation-text" id="expText">ここに解説文が入ります。</div>
+                    </div>
+
+                    <div class="action-container">
+                        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">次の問題へ ➔</button>
+                    </div>
+                </div>
+
+                <div class="final-result" id="finalResult">
+                    <h2>お疲れ様でした！クイズ終了です</h2>
+                    <div class="score-display"><span id="finalScore">0</span> / 40 問正解</div>
+                    <p id="finalMessage">正解率に応じてメッセージが表示されます。</p>
+                    <button class="restart-btn" onclick="restartQuiz()">もう一度挑戦する</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-slate-900 text-slate-400 text-xs text-center py-6 border-t border-slate-800">
+        <p>防災・避難訓練 事前学習ガイドブック © 2026</p>
+    </footer>
+
+    <!-- クイズ制御スクリプト -->
+    <script>
+    const quizData = [
+        {
+            q: "避難グッズを入れた「非常持出袋」は、家の中のあちこちに分散して置くのが良いでしょうか？",
+            options: ["〇（正しい）", "✕（誤り）"],
+            answer: 1,
+            hint: "いざ避難するときにサッと持って出られる場所（玄関付近など）にまとめて配置するのが基本です。",
+            exp: "誤りです。非常持出袋は、避難時にすぐ持ち出せるよう「玄関付近」や「寝室のドア近く」などにまとめて置いておくのが適切です。"
+        },
+        {
+            q: "大きな地震の揺れを感じたとき、まず最初にとるべき基本行動（シェイクアウト）はどれですか？",
+            options: ["すぐに外へ飛び出す", "姿勢を低くし、頭を守り、動かない", "キッチンに行ってコンロの火を消す"],
+            answer: 1,
+            hint: "揺れている最中に動くと転倒や落下物で怪我をします。",
+            exp: "正解は「姿勢を低くし、頭を守り、動かない」です。まずは机の下に入るなどして安全を確保しましょう。"
+        },
+        {
+            q: "オフィスで地震が発生した際、パソコンモニターや周辺機器の落下・飛散を防ぐ最も効果的な対策はどれですか？",
+            options: ["デスクの端に寄せておく", "耐震ストッパーや耐震ジェルでデスクに固定する", "タオルをかけておく"],
+            answer: 1,
+            hint: "大きな揺れでは機器が滑り落ちたり跳ねたりします。",
+            exp: "正解は「耐震ストッパーや耐震ジェルでデスクに固定する」です。転倒・飛散によるケガや避難経路の閉塞を防ぎます。"
+        },
+        {
+            q: "エレベーターに乗っている最中に大きな地震の揺れを感じました。どう行動すべきですか？",
+            options: ["すべての階のボタンを押し、最初にとまった階で降りる", "最上階のボタンだけを押す", "そのまま閉じ込められるまで待つ"],
+            answer: 0,
+            hint: "少しでも早く最寄りの階で降りることが命を守ります。",
+            exp: "正解は「すべての階のボタンを押し、最初にとまった階で降りる」です。降りた後は階段で避難しましょう。"
+        },
+        {
+            q: "エレベーター内に閉じ込められてしまった場合の正しい対応はどれですか？",
+            options: ["天井の脱出口から無理やり外に出る", "非常ボタン（インターホン）を押し、落ち着いて救助を待つ", "大声で叫び続ける"],
+            answer: 1,
+            hint: "無理な脱出は落下事故の原因になります。",
+            exp: "正解は「非常ボタン（インターホン）を押して連絡し、救助を待つ」です。大声の出しすぎは体力を消耗するため控えましょう。"
+        },
+        {
+            q: "大きな地震の後、避難する際にエレベーターを使用しても良いでしょうか？",
+            options: ["〇（正しい）", "✕（誤り）"],
+            answer: 1,
+            hint: "余震による停電で閉じ込められる危険があります。",
+            exp: "誤り（✕）です。避難時は余震による停電で閉じ込められる恐れがあるため、必ず「階段」を使用します。"
+        },
+        {
+            q: "屋外で地震に遭遇した際、安全を確保するために近づいてはいけない場所はどれですか？",
+            options: ["広場や公園の中央", "ブロック塀や自動販売機の近く", "障害物のない空き地"],
+            answer: 1,
+            hint: "倒壊して下敷きになるリスクが高い構造物です。",
+            exp: "正解は「ブロック塀や自動販売機の近く」です。強い揺れで倒壊する危険性が非常に高いため離れましょう。"
+        },
+        {
+            q: "地震で倒壊した建物や家具の下敷きになり閉じ込められた際、位置を知らせる最善の方法は？",
+            options: ["体力が尽きるまで大声を出し続ける", "近くにある硬いもの（パイプや壁）を叩いて音を立てる", "静かに寝て待つ"],
+            answer: 1,
+            hint: "大声は想像以上に体力を奪います。",
+            exp: "正解は「近くにある硬いものを叩いて音を立てる」です。体力を温存しながら外部へ居場所を知らせることができます。"
+        },
+        {
+            q: "家具を壁に固定する際、最も確実に固定できるネジの止め先はどこですか？",
+            options: ["石膏ボードの表面", "壁の奥にある「柱」や「間柱（下地）」", "壁紙の上"],
+            answer: 1,
+            hint: "表面の薄いボードだけに留めても家具の重量で抜けてしまいます。",
+            exp: "正解は「柱や間柱（下地）」です。下地探しツールなどを使い、柱に直接L字金具等をネジ留めするのが正解です。"
+        },
+        {
+            q: "地震発生直後、家族や事業所への連絡が電話で繋がらない場合、推奨される連絡手段は？",
+            options: ["何度も電話をかけ直す", "災害用伝言ダイヤル（171）やWeb171、SNS等のデータ通信を使う", "諦めて何もしない"],
+            answer: 1,
+            hint: "音声通話回線は優先的な通信制限がかかります。",
+            exp: "正解は「171やWeb171、SNS等のデータ通信」です。パケット通信は比較的繋がりやすいため有効です。"
+        },
+        {
+            q: "一般的な粉末消火器（業務用10型など）の連続放射時間はどれくらいでしょうか？",
+            options: ["約15秒", "約3分", "約10分"],
+            answer: 0,
+            hint: "消火器の薬品が出る時間は想像以上に短いです。",
+            exp: "正解は「約15秒」です。狙いをしっかり定めて火元（燃えている物自体）に向かって噴射する必要があります。"
+        },
+        {
+            q: "火災時、目の前の扉を開けて避難する直前に行うべき安全確認はどれですか？",
+            options: ["扉を勢いよく開けて覗き込む", "手の甲でドアノブや扉の熱さを確認する", "鍵がかかっているかだけ確認する"],
+            answer: 1,
+            hint: "ドアの向こう側が火の海になっている可能性があります。",
+            exp: "正解は「手の甲でドアノブの熱さを確認する」です。熱い場合は奥で大火災が起きているため絶対に開けてはいけません。"
+        },
+        {
+            q: "火災時に発生する「煙」の移動速度について正しい記述はどれですか？",
+            options: ["横方向より縦（上）方向への移動速度の方が圧倒的に速い", "縦方向より横方向の方が速い", "縦も横も同じ速度である"],
+            answer: 0,
+            hint: "煙は上昇気流に乗って上へ勢いよく登っていきます。",
+            exp: "正解は「横方向（約0.5〜1m/秒）より縦方向（約3〜5m/秒）が速い」です。階段等での煙の上昇は極めて危険です。"
+        },
+        {
+            q: "煙が充満した通路を避難する際の正しい姿勢はどれですか？",
+            options: ["直立して走り抜ける", "床近くに口元を近づけ、ハンカチ等で覆い低い姿勢で進む", "仰向けになって這って進む"],
+            answer: 1,
+            hint: "きれいな空気は床付近に残ります。",
+            exp: "正解は「低い姿勢で口元を覆い進む」です。煙は上に溜まるため、床付近の空気を取り吸煙を防ぎます。"
+        },
+        {
+            q: "119番通報をした際、電話口で最初に伝えるべき重要な情報はどれですか？",
+            options: ["自分の名前", "「火災」か「救急」かの区別と発生場所（住所）", "被害の金額"],
+            answer: 1,
+            hint: "消防車か救急車か、どこに向かうべきかを即座に判断するためです。",
+            exp: "正解は「『火災』か『救急』かと発生場所（住所）」です。指令員の質問に落ち着いて答えましょう。"
+        },
+        {
+            q: "自分の服に火が移ってしまった（着衣着火）ときの正しい対処法（ストップ・ドロップ＆ロール）は？",
+            options: ["あわてて走り回って火を消す", "その場で立ち止まり、倒れて床を転がり火を消す", "服を脱ごうとして立ち尽くす"],
+            answer: 1,
+            hint: "走ると風が送られて火がさらに激しく燃え上がります。",
+            exp: "正解は「止まる・倒れる・転がる」です。体と床の間に空気を遮断して窒息消火させます。"
+        },
+        {
+            q: "初期消火を行おうとしましたが、火が天井に届いてしまいました。どうすべきですか？",
+            options: ["引き続き消火器で消火を続ける", "初期消火を諦め、周囲に火災を知らせて直ちに避難する", "水バケツを探しに行く"],
+            answer: 1,
+            hint: "初期消火の限界目安は「火が天井に届くまで」です。",
+            exp: "正解は「直ちに避難する」です。天井に火が移った時点で個人での初期消火は不可能です。"
+        },
+        {
+            q: "消火器を使用する際の手順「ピン・ポン・パン」の最初の操作は？",
+            options: ["ホースを外す", "黄色い安全ピンを抜く", "レバーを握る"],
+            answer: 1,
+            hint: "誤噴射を防ぐストッパーを外すのが最初です。",
+            exp: "正解は「安全ピンを抜く」です。①ピンを抜く ➔ ②ホースを火元へ ➔ ③レバーを握る の順です。"
+        },
+        {
+            q: "火災が発生した部屋から脱出する際、部屋のドアはどうしておくのが適切ですか？",
+            options: ["開けたままにしておく", "ドアを閉めて（鍵はかけずに）逃げる", "鍵をしっかりかけて逃げる"],
+            answer: 1,
+            hint: "酸素の供給を絶ち、炎や煙の拡大を遅らせる必要があります。",
+            exp: "正解は「ドアを閉めて逃げる」です。空気の流れを遮断し、他の部屋への延焼を遅らせることができます。"
+        },
+        {
+            q: "タコ足配線やコンセントのホコリが原因で起きる火災を何と呼びますか？",
+            options: ["バックドラフト現象", "トラッキング現象", "フラッシュオーバー現象"],
+            answer: 1,
+            hint: "ホコリが湿気を吸ってスパークする現象です。",
+            exp: "正解は「トラッキング現象」です。定期的なコンセントの清掃で予防できます。"
+        },
+        {
+            q: "自治体から「警戒レベル4」が発令されました。どのような行動をとるべきですか？",
+            options: ["高齢者のみ避難を開始する", "対象地域から危険な場所から全員速やかに避難する", "まだ自宅で様子を見る"],
+            answer: 1,
+            hint: "警戒レベル4は「全員避難」の段階です。",
+            exp: "正解は「全員速やかに避難する」です。警戒レベル5はすでに災害が発生している状況のため、レベル4で確実に避難します。"
+        },
+        {
+            q: "避難時の集団行動のルール「お・は・し・も・ち」の「も」は何を意味しますか？",
+            options: ["物を投げない", "（忘れ物を取りに）戻らない", "文句を言わない"],
+            answer: 1,
+            hint: "一度避難を開始したら、荷物を取りに戻ってはいけません。",
+            exp: "正解は「戻らない」です。（押さない・走らない・しゃべらない・戻らない・ちかよらない）"
+        },
+        {
+            q: "大雨で道路が冠水（浸水）している中を避難する際、履くべき靴はどれですか？",
+            options: ["長靴（レインブーツ）", "脱げにくい紐つきのスニーカー", "ビーチサンダル"],
+            answer: 1,
+            hint: "長靴は中に水が入ると重くなり、脱げて歩けなくなります。",
+            exp: "正解は「スニーカー」です。水圧でも脱げにくく、足元の危険物から足を保護できます。"
+        },
+        {
+            q: "水没した道路を移動する際、手持ちの「傘」はどのように活用するのが正しいですか？",
+            options: ["雨に濡れないよう頭上に差す", "足元のマンホールのフタ外れや水溜まりの深さを確認する「杖」として使う", "杖代わりに両手で横に持つ"],
+            answer: 1,
+            hint: "濁った水で見えない足元のトラップを探るために使います。",
+            exp: "正解は「足元を探る杖として使う」です。マンホールの穴や用水路への落とし穴を防ぎます。"
+        },
+        {
+            q: "地下街や地下鉄で停電・災害に遭遇した際、地上へ避難する正しい方法は？",
+            options: ["暗闇の中を全力でダッシュする", "壁沿いに手をつき、誘導灯の明かりを頼りに落ち着いて進む", "その場に座り込んで動かない"],
+            answer: 1,
+            hint: "一箇所に押し寄せると将棋倒しの危険があります。",
+            exp: "正解は「壁沿いに手をつき落ち着いて進む」です。非常用誘導灯に従ってパニックを起こさず移動します。"
+        },
+        {
+            q: "土砂災害の危険が迫っているサイン（前兆現象）として誤っているものはどれですか？",
+            options: ["がけから綺麗な澄んだ水が湧き出る", "がけから小石がパラパラ落ちてくる", "山鳴りや地面のひび割れが生じる"],
+            answer: 0,
+            hint: "土砂崩れの前兆では、湧き水が「濁る」のが一般的です。",
+            exp: "正解（誤っているもの）は「澄んだ水が湧き出る」です。実際は水が濁ったり、逆に湧き水が急に止まったりします。"
+        },
+        {
+            q: "台風接近時、風が強くなってきた時間帯に屋外の鉢植えや物干し竿を片付けるのは安全ですか？",
+            options: ["〇（正しい）", "✕（誤り）"],
+            answer: 1,
+            hint: "強風が吹き始めてからの屋外作業は飛散物で命を落とす危険があります。",
+            exp: "誤り（✕）です。飛来物や強風で転倒する危険があるため、飛ばされやすいものは「風が強くなる前」に室内へ入れます。"
+        },
+        {
+            q: "津波警報が発令された場合、避難すべき場所として最も適切なのはどこですか？",
+            options: ["海岸近くの頑丈な平屋建物", "高台や指定された津波避難ビルの上層階", "近くの港の防波堤の上"],
+            answer: 1,
+            hint: "津波は想像以上の高さとパワーで押し寄せます。",
+            exp: "正解は「高台や津波避難ビル」です。できるだけ遠くではなく「できるだけ高く」へ逃げることが重要です。"
+        },
+        {
+            q: "避難指示が出た際、浸水が深すぎて屋外への避難が危険な場合の「垂直避難」とは？",
+            options: ["地下室に潜る", "自宅や近くの頑丈な建物の2階以上の高い場所へ移動する", "屋根の上に登る"],
+            answer: 1,
+            hint: "屋外移動が不可能な場合、屋内で最も高い場所へ避難します。",
+            exp: "正解は「建物の2階以上の高い場所へ移動する」です。安全に屋外移動できない場合の緊急措置です。"
+        },
+        {
+            q: "ハザードマップで確認できる情報として含まれないものはどれですか？",
+            options: ["浸水想定区域や土砂災害警戒区域", "最寄りの指定避難所の場所", "今日の天候・気温の予測"],
+            answer: 2,
+            hint: "地域の「災害リスク」と「避難場所」をまとめた地図です。",
+            exp: "正解は「今日の天候・気温の予測」です。ハザードマップは地域の被害想定や避難所を確認するためのものです。"
+        },
+        {
+            q: "災害時の備蓄用飲料水として、大人1人1日あたり最低限必要な量はどれくらいですか？",
+            options: ["約1リットル", "約3リットル", "約10リットル"],
+            answer: 1,
+            hint: "飲用だけでなく衛生用・調理用も含めた必要量です。",
+            exp: "正解は「約3リットル」です。3日分で1人9リットルの備蓄が推奨されています。"
+        },
+        {
+            q: "日常生活で消費しながら食料を定期的に補充・備蓄する手法を何と呼びますか？",
+            options: ["ローリングストック", "タイムライン", "フェーズフリー"],
+            answer: 0,
+            hint: "買い置きを古い順に食べ、減った分を買い足す方法です。",
+            exp: "正解は「ローリングストック」です。賞味期限切れを防ぎながら常に新しい備蓄を保てます。"
+        },
+        {
+            q: "災害用伝言ダイヤルの電話番号はどれですか？",
+            options: ["110", "119", "171"],
+            answer: 2,
+            hint: "語呂合わせで「いないい（171）」と覚えます。",
+            exp: "正解は「171」です。声の伝言を録音・再生できる災害時専用サービスです。"
+        },
+        {
+            q: "避難所での集団生活において、感染症予防（風邪・インフルエンザ等）のため最も大切な行動は？",
+            options: ["部屋の窓を締め切る", "手洗いや手指消毒、マスク着用を徹底する", "水分補給を一切しない"],
+            answer: 1,
+            hint: "多くの人が集まる場所では衛生管理が最重要です。",
+            exp: "正解は「手洗い・消毒・マスクの徹底」です。集団感染を防ぐために個人での衛生管理が不可欠です。"
+        },
+        {
+            q: "大きなケガで出血している人への応急手当「直接圧迫止血法」の正しいやり方は？",
+            options: ["傷口より心臓に近い部分をロープで強く縛る", "清潔なガーゼやハンカチを傷口に直接当てて手で強く圧迫する", "傷口に水道水をかけ続けるだけで放置する"],
+            answer: 1,
+            hint: "傷口を直接圧迫するのが最も安全で確実な止血法です。",
+            exp: "正解は「ガーゼ等を傷口に直接当てて強く圧迫する」です。感染予防のためビニール手袋等を着用しましょう。"
+        },
+        {
+            q: "直接圧迫止血を行う際、手当をする側の安全のために着用すべきものは？",
+            options: ["軍手", "ビニール手袋またはポリ袋", "素手"],
+            answer: 1,
+            hint: "相手の血液に直接触れないように保護します。",
+            exp: "正解は「ビニール手袋またはポリ袋」です。血液媒介性の感染症から自分を守るために必須です。"
+        },
+        {
+            q: "避難所でのエコノミークラス症候群（血栓症）を防ぐために有効な予防策はどれですか？",
+            options: ["じっと座ったまま同じ姿勢を保つ", "定期的に軽い運動やストレッチを行い、水分を摂る", "水分を極力摂らないようにする"],
+            answer: 1,
+            hint: "足を動かさないことと脱水が主な原因になります。",
+            exp: "正解は「定期的な運動・ストレッチと水分補給」です。足の屈伸運動などが効果的です。"
+        },
+        {
+            q: "ブレーカーを落とさずに避難した場合、通電再開時に発生する火災を何と呼びますか？",
+            options: ["通電火災", "自然発火", "漏電爆発"],
+            answer: 0,
+            hint: "停電復旧時に倒れたヒーター等に再点火して起きる火災です。",
+            exp: "正解は「通電火災」です。避難時には必ず「ブレーカーを落として」家を出るようにしましょう。"
+        },
+        {
+            q: "避難所での共有スペース（トイレや洗面台）を使用する際の正しいマナーは？",
+            options: ["次の人のために綺麗に使い、清掃ルールを守る", "自分だけが使ったら掃除は誰かに任せる", "水は無制限に使い切る"],
+            answer: 0,
+            hint: "みんなで使う場所の衛生維持が避難所環境を保ちます。",
+            exp: "正解は「綺麗に使い、ルールを守る」です。お互いの配慮が集団生活でのトラブルを防ぎます。"
+        },
+        {
+            q: "防災カードや緊急連絡先メモに記載しておくべき内容として適切なものは？",
+            options: ["家族の連絡先・持病やアレルギー・指定避難所の場所", "好きな食べ物や趣味", "SNSのパスワード"],
+            answer: 0,
+            hint: "万が一自分が保護された際に必要な医療・連絡情報です。",
+            exp: "正解は「家族連絡先・持病/アレルギー・避難所」です。財布や鞄に入れておくと緊急時に役立ちます。"
+        }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let selectedOption = null;
+
+    function startQuiz() {
+        document.getElementById("learningSection").style.display = "none";
+        document.getElementById("quizSection").style.display = "block";
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = quizData[currentQ];
+        
+        document.getElementById("progressBar").style.width = `${((currentQ + 1) / quizData.length) * 100}%`;
+        document.getElementById("questionCounter").innerText = `問題 ${currentQ + 1} / ${quizData.length}`;
+        document.getElementById("qNum").innerText = `第 ${currentQ + 1} 問`;
+        document.getElementById("qText").innerText = q.q;
+        document.getElementById("hintText").innerText = q.hint;
+        
+        const hintDetails = document.querySelector(".hint-container details");
+        if(hintDetails) hintDetails.open = false;
+
+        const grid = document.getElementById("optionsGrid");
+        grid.innerHTML = "";
+        selectedOption = null;
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx);
+            grid.appendChild(btn);
+        });
+
+        document.getElementById("explanationBox").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function checkAnswer(idx) {
+        if (selectedOption !== null) return;
+        selectedOption = idx;
+
+        const q = quizData[currentQ];
+        const buttons = document.querySelectorAll(".option-btn");
+        const expBox = document.getElementById("explanationBox");
+        const badge = document.getElementById("resultBadge");
+        const expTitle = document.getElementById("expTitle");
+        const expText = document.getElementById("expText");
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (idx === q.answer) {
+            score++;
+            document.getElementById("scoreCounter").innerText = score;
+            buttons[idx].classList.add("selected-correct");
+            expBox.className = "explanation-box correct";
+            badge.className = "result-badge correct";
+            badge.innerText = "正解！";
+            expTitle.innerText = "素晴らしい！正しい判断です。";
+        } else {
+            buttons[idx].classList.add("selected-incorrect");
+            buttons[q.answer].classList.add("selected-correct");
+            expBox.className = "explanation-box incorrect";
+            badge.className = "result-badge incorrect";
+            badge.innerText = "不正解...";
+            expTitle.innerText = `正解は「${q.options[q.answer]}」でした。`;
+        }
+
+        expText.innerText = q.exp;
+        expBox.style.display = "block";
+        
+        const nextBtn = document.getElementById("nextBtn");
+        if (currentQ < quizData.length - 1) {
+            nextBtn.innerText = "次の問題へ ➔";
+        } else {
+            nextBtn.innerText = "結果を見る ➔";
+        }
+        nextBtn.style.display = "inline-block";
+    }
+
+    function nextQuestion() {
+        if (currentQ < quizData.length - 1) {
+            currentQ++;
+            loadQuestion();
+        } else {
+            showFinalResult();
+        }
+    }
+
+    function showFinalResult() {
+        document.getElementById("quizContent").style.display = "none";
+        const finalRes = document.getElementById("finalResult");
+        finalRes.style.display = "block";
+        
+        document.getElementById("finalScore").innerText = score;
+        
+        const msg = document.getElementById("finalMessage");
+        const ratio = score / quizData.length;
+        if (ratio === 1) {
+            msg.innerText = "素晴らしい！全問正解です。防災知識マスターとして日頃の備えもバッチリですね！";
+        } else if (ratio >= 0.8) {
+            msg.innerText = "高得点です！間違えた設問を予習ハンドブックでおさらいしておきましょう。";
+        } else if (ratio >= 0.5) {
+            msg.innerText = "合格点です！いざという時にスムーズに行動できるよう復習しておきましょう。";
+        } else {
+            msg.innerText = "もう一度ハンドブックを見直して、正しい知識を身につけましょう！";
+        }
+    }
+
+    function restartQuiz() {
+        currentQ = 0;
+        score = 0;
+        document.getElementById("scoreCounter").innerText = 0;
+        document.getElementById("finalResult").style.display = "none";
+        document.getElementById("quizContent").style.display = "block";
+        document.getElementById("quizSection").style.display = "none";
+        document.getElementById("learningSection").style.display = "block";
+    }
+    </script>
+</body>
+</html>
